@@ -1,5 +1,7 @@
 package me.iwf.photopicker.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
@@ -12,14 +14,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import com.bumptech.glide.Glide;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.adapter.PhotoPagerAdapter;
 
@@ -117,7 +116,7 @@ public class ImagePagerFragment extends Fragment {
       thumbnailHeight = bundle.getInt(ARG_THUMBNAIL_HEIGHT);
     }
 
-    mPagerAdapter = new PhotoPagerAdapter(Glide.with(this), paths);
+    mPagerAdapter = new PhotoPagerAdapter(paths);
   }
 
 
@@ -187,15 +186,16 @@ public class ImagePagerFragment extends Fragment {
     // Set starting values for properties we're going to animate. These
     // values scale and position the full size version down to the thumbnail
     // size/location, from which we'll animate it back up
-    ViewHelper.setPivotX(mViewPager, 0);
-    ViewHelper.setPivotY(mViewPager, 0);
-    ViewHelper.setScaleX(mViewPager, (float) thumbnailWidth / mViewPager.getWidth());
-    ViewHelper.setScaleY(mViewPager, (float) thumbnailHeight / mViewPager.getHeight());
-    ViewHelper.setTranslationX(mViewPager, thumbnailLeft);
-    ViewHelper.setTranslationY(mViewPager, thumbnailTop);
+    mViewPager.setPivotX(0F);
+
+    mViewPager.setPivotY(0);
+    mViewPager.setScaleX((float) thumbnailWidth / mViewPager.getWidth());
+    mViewPager.setScaleY((float) thumbnailHeight / mViewPager.getHeight());
+    mViewPager.setTranslationX(thumbnailLeft);
+    mViewPager.setTranslationY(thumbnailTop);
 
     // Animate scale and translation to go from thumbnail to full size
-    ViewPropertyAnimator.animate(mViewPager)
+    mViewPager.animate()
         .setDuration(duration)
         .scaleX(1)
         .scaleY(1)
@@ -236,7 +236,7 @@ public class ImagePagerFragment extends Fragment {
     final long duration = ANIM_DURATION;
 
     // Animate image back to thumbnail size/location
-    ViewPropertyAnimator.animate(mViewPager)
+    mViewPager.animate()
         .setDuration(duration)
         .setInterpolator(new AccelerateInterpolator())
         .scaleX((float) thumbnailWidth / mViewPager.getWidth())

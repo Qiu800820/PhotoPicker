@@ -2,20 +2,17 @@ package me.iwf.photopicker.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 
@@ -25,11 +22,9 @@ import me.iwf.photopicker.utils.AndroidLifecycleUtils;
 public class PhotoPagerAdapter extends PagerAdapter {
 
   private List<String> paths = new ArrayList<>();
-  private RequestManager mGlide;
 
-  public PhotoPagerAdapter(RequestManager glide, List<String> paths) {
+  public PhotoPagerAdapter(List<String> paths) {
     this.paths = paths;
-    this.mGlide = glide;
   }
 
   @Override public Object instantiateItem(ViewGroup container, int position) {
@@ -40,24 +35,11 @@ public class PhotoPagerAdapter extends PagerAdapter {
     final ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_pager);
 
     final String path = paths.get(position);
-    final Uri uri;
-    if (path.startsWith("http")) {
-      uri = Uri.parse(path);
-    } else {
-      uri = Uri.fromFile(new File(path));
-    }
 
     boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(context);
 
     if (canLoadImage) {
-      mGlide.load(uri)
-              .thumbnail(0.1f)
-              .dontAnimate()
-              .dontTransform()
-              .override(800, 800)
-              .placeholder(R.drawable.__picker_ic_photo_black_48dp)
-              .error(R.drawable.__picker_ic_broken_image_black_48dp)
-              .into(imageView);
+      PhotoPicker.getImageLoader().load(imageView.getContext(), new File(path), imageView, imageView.getWidth(), imageView.getHeight());
     }
 
     imageView.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +70,8 @@ public class PhotoPagerAdapter extends PagerAdapter {
 
   @Override
   public void destroyItem(ViewGroup container, int position, Object object) {
-    container.removeView((View) object);
-    Glide.clear((View) object);
+    container.removeView((ImageView) object);
+    PhotoPicker.getImageLoader().clear((ImageView) object);
   }
 
   @Override

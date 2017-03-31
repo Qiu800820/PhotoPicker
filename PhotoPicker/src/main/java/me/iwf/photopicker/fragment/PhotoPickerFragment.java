@@ -20,9 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +68,6 @@ public class PhotoPickerFragment extends Fragment {
   private final static String EXTRA_GIF = "gif";
   private final static String EXTRA_ORIGIN = "origin";
   private ListPopupWindow listPopupWindow;
-  private RequestManager mGlideRequestManager;
 
   public static PhotoPickerFragment newInstance(boolean showCamera, boolean showGif,
       boolean previewEnable, int column, int maxCount, ArrayList<String> originalPhotos) {
@@ -92,8 +88,6 @@ public class PhotoPickerFragment extends Fragment {
 
     setRetainInstance(true);
 
-    mGlideRequestManager = Glide.with(this);
-
     directories = new ArrayList<>();
     originalPhotos = getArguments().getStringArrayList(EXTRA_ORIGIN);
 
@@ -101,7 +95,7 @@ public class PhotoPickerFragment extends Fragment {
     boolean showCamera = getArguments().getBoolean(EXTRA_CAMERA, true);
     boolean previewEnable = getArguments().getBoolean(EXTRA_PREVIEW_ENABLED, true);
 
-    photoGridAdapter = new PhotoGridAdapter(getActivity(), mGlideRequestManager, directories, originalPhotos, column);
+    photoGridAdapter = new PhotoGridAdapter(getActivity(), directories, originalPhotos, column);
     photoGridAdapter.setShowCamera(showCamera);
     photoGridAdapter.setPreviewEnable(previewEnable);
 
@@ -129,7 +123,7 @@ public class PhotoPickerFragment extends Fragment {
 
     final View rootView = inflater.inflate(R.layout.__picker_fragment_photo_picker, container, false);
 
-    listAdapter  = new PopupDirectoryListAdapter(mGlideRequestManager, directories);
+    listAdapter  = new PopupDirectoryListAdapter(directories);
 
     RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
     StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(column, OrientationHelper.VERTICAL);
@@ -202,7 +196,7 @@ public class PhotoPickerFragment extends Fragment {
         super.onScrolled(recyclerView, dx, dy);
         // Log.d(">>> Picker >>>", "dy = " + dy);
         if (Math.abs(dy) > SCROLL_THRESHOLD) {
-          mGlideRequestManager.pauseRequests();
+          PhotoPicker.getImageLoader().pauseRequests();
         } else {
           resumeRequestsIfNotDestroyed();
         }
@@ -314,6 +308,6 @@ public class PhotoPickerFragment extends Fragment {
       return;
     }
 
-    mGlideRequestManager.resumeRequests();
+    PhotoPicker.getImageLoader().resumeRequests();
   }
 }

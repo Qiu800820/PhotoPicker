@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.entity.PhotoDirectory;
@@ -26,7 +27,6 @@ import me.iwf.photopicker.utils.MediaStoreHelper;
  */
 public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoViewHolder> {
 
-  private RequestManager glide;
 
   private OnItemCheckListener onItemCheckListener    = null;
   private OnPhotoClickListener onPhotoClickListener  = null;
@@ -43,14 +43,13 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   private int columnNumber = COL_NUMBER_DEFAULT;
 
 
-  public PhotoGridAdapter(Context context, RequestManager requestManager, List<PhotoDirectory> photoDirectories) {
+  public PhotoGridAdapter(Context context, List<PhotoDirectory> photoDirectories) {
     this.photoDirectories = photoDirectories;
-    this.glide = requestManager;
     setColumnNumber(context, columnNumber);
   }
 
-  public PhotoGridAdapter(Context context, RequestManager requestManager,  List<PhotoDirectory> photoDirectories, ArrayList<String> orginalPhotos, int colNum) {
-    this(context, requestManager, photoDirectories);
+  public PhotoGridAdapter(Context context, List<PhotoDirectory> photoDirectories, ArrayList<String> orginalPhotos, int colNum) {
+    this(context, photoDirectories);
     setColumnNumber(context, colNum);
     selectedPhotos = new ArrayList<>();
     if (orginalPhotos != null) selectedPhotos.addAll(orginalPhotos);
@@ -105,15 +104,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       boolean canLoadImage = AndroidLifecycleUtils.canLoadImage(holder.ivPhoto.getContext());
 
       if (canLoadImage) {
-        glide
-                .load(new File(photo.getPath()))
-                .centerCrop()
-                .dontAnimate()
-                .thumbnail(0.5f)
-                .override(imageSize, imageSize)
-                .placeholder(R.drawable.__picker_ic_photo_black_48dp)
-                .error(R.drawable.__picker_ic_broken_image_black_48dp)
-                .into(holder.ivPhoto);
+        PhotoPicker.getImageLoader().load(holder.ivPhoto.getContext(), new File(photo.getPath()), holder.ivPhoto, imageSize, imageSize);
+
       }
 
       final boolean isChecked = isSelected(photo);
@@ -216,7 +208,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   }
 
   @Override public void onViewRecycled(PhotoViewHolder holder) {
-    Glide.clear(holder.ivPhoto);
+    PhotoPicker.getImageLoader().clear(holder.ivPhoto);
     super.onViewRecycled(holder);
   }
 }
