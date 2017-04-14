@@ -7,9 +7,9 @@
 ![](http://ww2.sinaimg.cn/large/5e9a81dbgw1etra61rnr9j206z0ce3yu.jpg)
 ![](http://ww3.sinaimg.cn/large/5e9a81dbgw1etra6q2edzj206z0cedgg.jpg)
 ![](http://ogkb67oc8.bkt.clouddn.com/F028B942CF5978D900B15033941478B7.jpg?imageView2/2/w/250/)
-![](https://github.com/Qiu800820/PhotoPicker/tree/master/img/screenshot2017-04-14_001.png)
-![](https://github.com/Qiu800820/PhotoPicker/tree/master/img/screenshot2017-04-14_002.png)
-![](https://github.com/Qiu800820/PhotoPicker/tree/master/img/device-2017-04-14-151354.png)
+![](https://github.com/Qiu800820/PhotoPicker/raw/master/img/screenshot2017-04-14_001.png)
+![](https://github.com/Qiu800820/PhotoPicker/raw/master/img/screenshot2017-04-14_002.png)
+![](https://github.com/Qiu800820/PhotoPicker/raw/master/img/device-2017-04-14-151354.png)
 
 ---
 
