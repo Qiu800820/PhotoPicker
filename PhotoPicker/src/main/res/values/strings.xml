@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="__picker_title">Images</string>
-  <string name="__picker_delete">Delete</string>
-  <string name="__picker_done">Done</string>
-  <string name="__picker_done_with_count">Done(%1$d/%2$d)</string>
+
+  <string name="__picker_title">图片</string>
+  <string name="__picker_delete">删除</string>
+  <string name="__picker_done">完成</string>
+  <string name="__picker_done_with_count">完成(%1$d/%2$d)</string>
   <string name="__picker_image_index">%1$d/%2$d</string>
-  <string name="__picker_undo">Undo</string>
-  <string name="__picker_deleted_a_photo">Deleted a photo</string>
-  <string name="__picker_confirm_to_delete">Confirm to delete?</string>
-  <string name="__picker_yes">Yes</string>
-  <string name="__picker_cancel">Cancel</string>
-  <string name="__picker_all_image">All Images</string>
-  <string name="__picker_image_count">%1$d</string>
-  <string name="__picker_over_max_count_tips">You can only select %1$d images</string>
+  <string name="__picker_undo">撤消</string>
+  <string name="__picker_deleted_a_photo">删除了一张图片</string>
+  <string name="__picker_confirm_to_delete">确认删除？</string>
+  <string name="__picker_yes">确定</string>
+  <string name="__picker_cancel">取消</string>
+  <string name="__picker_all_image">所有图片</string>
+  <string name="__picker_over_max_count_tips">你最多可以选择%1$d张图片</string>
+  <string name="__picker_image_count">%1$d张</string>
+  <string name="__picker_video_over_max_size_tips">视频大小超过限制</string>
+
+  <string-array name="capture_type">
+    <item name="__photo">拍照</item>
+    <item name="__video">拍摄</item>
+  </string-array>
 </resources>

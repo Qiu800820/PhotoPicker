@@ -10,21 +10,24 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.DrawableTypeRequest;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
+import me.iwf.photopicker.entity.Media;
 import me.iwf.photopicker.event.ImageLoader;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_DELETE_VIDEO = 1001;
+
     private PhotoAdapter photoAdapter;
 
-    private ArrayList<String> selectedPhotos = new ArrayList<>();
+    private ArrayList<Media> selectedPhotos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,23 +37,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void clear(ImageView ivPhoto) {
 
-                Picasso.with(ivPhoto.getContext()).cancelRequest(ivPhoto);
+                Glide.clear(ivPhoto);
             }
 
             @Override
             public void pauseRequests() {
+                Glide.with(MainActivity.this).pauseRequests();
             }
 
             @Override
             public void resumeRequests() {
+                Glide.with(MainActivity.this).resumeRequests();
             }
 
             @Override
             public void load(Context context, File path, ImageView ivPhoto, int width, int height) {
-                Picasso.with(context)
-                        .load(path)
-                        .resize(width, height)
-                        .into(ivPhoto);
+
+                DrawableTypeRequest drawableTypeRequest = Glide.with(context).load(path);
+
+                if (width > 0 && height > 0) {
+                    drawableTypeRequest.override(width, height);
+                }
+
+                drawableTypeRequest.into(ivPhoto);
             }
         });
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -65,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 PhotoPicker.builder()
                         .setPhotoCount(9)
                         .setGridColumnCount(3)
+                        .setShowVideo(true)
                         .start(MainActivity.this);
             }
         });
@@ -109,13 +119,22 @@ public class MainActivity extends AppCompatActivity {
                                     .setShowCamera(true)
                                     .setPreviewEnabled(false)
                                     .setSelected(selectedPhotos)
+                                    .setShowVideo(true)
                                     .start(MainActivity.this);
                         } else {
-                            PhotoPreview.builder()
-                                    .setPhotos(selectedPhotos)
-                                    .setCurrentItem(position)
-                                    .start(MainActivity.this);
+                            Media media = photoAdapter.getItem(position);
+                            if (media != null && media.getType() == Media.FILE_TYPE_VIDEO) {
+                                startActivityForResult(VideoPlayActivity.getVideoPlayIntent(view.getContext(), media.getPath(), true, false), REQUEST_CODE_DELETE_VIDEO);
+                            } else {
+                                PhotoPreview.builder()
+                                        .setPhotos(selectedPhotos)
+                                        .setCurrentItem(position)
+                                        .start(MainActivity.this);
+                            }
+
                         }
+
+
                     }
                 }));
     }
@@ -127,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK &&
                 (requestCode == PhotoPicker.REQUEST_CODE || requestCode == PhotoPreview.REQUEST_CODE)) {
 
-            List<String> photos = null;
+            ArrayList<Media> photos = null;
             if (data != null) {
-                photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                photos = data.getParcelableArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
             }
             selectedPhotos.clear();
 
@@ -138,7 +157,12 @@ public class MainActivity extends AppCompatActivity {
                 selectedPhotos.addAll(photos);
             }
             photoAdapter.notifyDataSetChanged();
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_DELETE_VIDEO) {
+            selectedPhotos.clear();
+            photoAdapter.notifyDataSetChanged();
         }
+
+
     }
 
 }

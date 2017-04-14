@@ -1,38 +1,38 @@
 apply plugin: 'com.android.library'
 
 android {
-  compileSdkVersion 24
-  buildToolsVersion "24.0.2"
-  resourcePrefix "__picker_"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    resourcePrefix "__picker_"
 
-  dexOptions {
-    javaMaxHeapSize "4g"
-  }
-  defaultConfig {
-    minSdkVersion 12
-    targetSdkVersion 24
-  }
-  lintOptions {
-    abortOnError false
-  }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    defaultConfig {
+        minSdkVersion 12
+        targetSdkVersion 24
+    }
+    lintOptions {
+        disable 'ResourceName'
+    }
 }
 ext {
-  supportLibVersion = "24.+"
+    supportLibVersion = "24.+"
 }
 dependencies {
-  compile "com.android.support:support-v4:$supportLibVersion"
-  compile "com.android.support:appcompat-v7:$supportLibVersion"
-  compile "com.android.support:design:$supportLibVersion"
-  compile "com.android.support:recyclerview-v7:$supportLibVersion"
-  compile "com.android.support:support-annotations:$supportLibVersion"
+    compile "com.android.support:support-v4:$supportLibVersion"
+    compile "com.android.support:appcompat-v7:$supportLibVersion"
+    compile "com.android.support:design:$supportLibVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibVersion"
+    compile "com.android.support:support-annotations:$supportLibVersion"
 }
 
 apply plugin: 'com.novoda.bintray-release'
 publish {
-  userOrg = 'donglua'
-  groupId = 'me.iwf.photopicker'
-  artifactId = 'PhotoPicker'
-  publishVersion = '0.9.6'
-  desc = 'Photo Picker'
-  website = 'https://github.com/donglua/PhotoPicker'
+    userOrg = 'donglua'
+    groupId = 'me.iwf.photopicker'
+    artifactId = 'PhotoPicker'
+    publishVersion = '0.9.6'
+    desc = 'Photo Picker'
+    website = 'https://github.com/donglua/PhotoPicker'
 }

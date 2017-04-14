@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
+import me.iwf.photopicker.entity.Media;
 import me.iwf.photopicker.event.ImageLoader;
 import me.iwf.photopicker.utils.PermissionsUtils;
 
@@ -22,11 +23,17 @@ public class PhotoPicker {
     public final static int DEFAULT_MAX_COUNT = 9;
     public final static int DEFAULT_COLUMN_NUMBER = 3;
 
+    public final static String ACTION_MEDIA_CAPTURE = "me.iwf.photopicker.action.MEDIA_CAPTURE";
+
     public final static String KEY_SELECTED_PHOTOS = "SELECTED_PHOTOS";
+
+    public final static String EXTRA_MEDIA_TYPE = "media_type";
+
 
     public final static String EXTRA_MAX_COUNT = "MAX_COUNT";
     public final static String EXTRA_SHOW_CAMERA = "SHOW_CAMERA";
     public final static String EXTRA_SHOW_GIF = "SHOW_GIF";
+    public final static String EXTRA_SHOW_VIDEO = "SHOW_VIDEO";
     public final static String EXTRA_GRID_COLUMN = "column";
     public final static String EXTRA_ORIGINAL_PHOTOS = "ORIGINAL_PHOTOS";
     public final static String EXTRA_PREVIEW_ENABLED = "PREVIEW_ENABLED";
@@ -37,11 +44,11 @@ public class PhotoPicker {
         PhotoPicker.imageLoader = imageLoader;
     }
 
-    public static ImageLoader getImageLoader(){
+    public static ImageLoader getImageLoader() {
         return imageLoader;
     }
 
-    public static void destroy(){
+    public static void destroy() {
         imageLoader = null;
     }
 
@@ -134,13 +141,18 @@ public class PhotoPicker {
             return this;
         }
 
-        public PhotoPickerBuilder setSelected(ArrayList<String> imagesUri) {
-            mPickerOptionsBundle.putStringArrayList(EXTRA_ORIGINAL_PHOTOS, imagesUri);
+        public PhotoPickerBuilder setSelected(ArrayList<Media> imagesUri) {
+            mPickerOptionsBundle.putParcelableArrayList(EXTRA_ORIGINAL_PHOTOS, imagesUri);
             return this;
         }
 
         public PhotoPickerBuilder setPreviewEnabled(boolean previewEnabled) {
             mPickerOptionsBundle.putBoolean(EXTRA_PREVIEW_ENABLED, previewEnabled);
+            return this;
+        }
+
+        public PhotoPickerBuilder setShowVideo(boolean showVideo) {
+            mPickerOptionsBundle.putBoolean(EXTRA_SHOW_VIDEO, showVideo);
             return this;
         }
     }

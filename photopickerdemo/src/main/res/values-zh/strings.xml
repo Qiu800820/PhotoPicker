@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">PhotoPickerDemo</string>
-    <string name="pick_photo">选择图片</string>
+    <string name="pick_photo_and_video">选择图片及视频</string>
     <string name="pick_photo_without_camera">选择图片（不带拍照按钮且点击不预览图片）</string>
     <string name="pick_one_photo">选择单张图片</string>
     <string name="pick_photo_gif">选择gif图片</string>
     <string name="multiple_pick_photo">多次进入PhotoPicker选择图片</string>
+    <string name="error_params_empty">参数错误</string>
+    <string name="camera_and_microphone_rationale">访问相机及麦克风以完成摄像</string>
+    <string name="permission_error">权限错误</string>
 </resources>
